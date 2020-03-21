@@ -8,14 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.bookingcar.R;
+import com.example.bookingcar.models.user.SignInUser;
+import com.example.bookingcar.models.user.User;
+import com.example.bookingcar.requests.user.SignInRequest;
 
-public class EnterPageFragment extends Fragment {
+public class EnterPageFragment extends Fragment implements View.OnClickListener {
 
     private int pageNumber;
+    private  View view;
 
     public static EnterPageFragment newInstance(int page) {
         EnterPageFragment fragment = new EnterPageFragment();
@@ -42,9 +47,9 @@ public class EnterPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View result=inflater.inflate(R.layout.page_enter, container, false);
-        EditText name = result.findViewById(R.id.name);
-        EditText phone = result.findViewById(R.id.phone);
+        view = inflater.inflate(R.layout.page_enter, container, false);
+        EditText name = view.findViewById(R.id.name);
+        EditText phone = view.findViewById(R.id.phone);
         if(pageNumber == 0){
             name.setVisibility(View.GONE);
             phone.setVisibility(View.GONE);
@@ -53,6 +58,33 @@ public class EnterPageFragment extends Fragment {
             phone.setVisibility(View.VISIBLE);
         }
 
-        return result;
+        view.findViewById(R.id.enter_btn).setOnClickListener(this);
+
+        return view;
+    }
+
+    public void onClick(View v) {
+        EditText emailView = view.findViewById(R.id.email);
+        EditText passwordView = view.findViewById(R.id.password);
+        if(pageNumber == 0){
+            return;
+        }
+        EditText nameView = view.findViewById(R.id.name);
+        EditText phoneView = view.findViewById(R.id.phone);
+        SignInUser user = new SignInUser();
+        user.name = nameView.getText().toString();
+        user.email = emailView.getText().toString();
+        user.phone = phoneView.getText().toString();
+        user.password = passwordView.getText().toString();
+        SignInRequest request = new SignInRequest();
+        request.execute(user);
+        try{
+            User userResult = request.get();
+        } catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(getActivity(),"Пользователь зарегистрирован",Toast.LENGTH_LONG).show();
+        }
+
+
     }
 }
