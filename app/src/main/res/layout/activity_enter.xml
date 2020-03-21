@@ -4,5 +4,9 @@
     android:id="@+id/pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <androidx.viewpager.widget.PagerTabStrip
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"/>
 
 </androidx.viewpager.widget.ViewPager>
