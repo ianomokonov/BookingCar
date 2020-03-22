@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.example.bookingcar.Config;
+import com.example.bookingcar.UserService;
 import com.example.bookingcar.models.user.SignInUser;
 import com.example.bookingcar.models.user.User;
 import com.example.bookingcar.models.user.UserResponse;
@@ -20,7 +21,10 @@ public class SignInRequest extends AsyncTask<SignInUser, Void, User> {
     protected User doInBackground(SignInUser... users){
         try{
             UserResponse userResponse = gson.fromJson(ApiService.post(base_url, gson.toJson(users[0])), UserResponse.class);
-            return userResponse.user;
+            if(userResponse != null && userResponse.user != null){
+                UserService.SetUser(userResponse);
+                return userResponse.user;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

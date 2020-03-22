@@ -80,6 +80,7 @@ public class EnterPageFragment extends Fragment implements View.OnClickListener 
         request.execute(user);
         try{
             User userResult = request.get();
+            Toast.makeText(getActivity(),"Пользователь "+userResult.name+" зарегистрирован",Toast.LENGTH_LONG).show();
         } catch (Exception e){
             e.printStackTrace();
             Toast.makeText(getActivity(),"Пользователь зарегистрирован",Toast.LENGTH_LONG).show();
