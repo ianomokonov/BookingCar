@@ -21,26 +21,14 @@ public class ApiService {
 
     public static String get(String uri) {
         try {
-            URL url = new URL(uri);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //Открытие соединения
-            conn.setRequestMethod("GET");
-            BufferedReader rd;
-            int status =conn.getResponseCode();
-            if(status<400){
-                rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                //read response
-            }else{
-                rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                //read response
-            }
-//            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream())); //Считывание ответа
-            String result = "";
-            String line = "";
-            while ((line = rd.readLine()) != null) {
-                result += line.replaceAll("\\<.*?>",""); //сохранение ответа и удаление тегов
-            }
-            rd.close(); // закрытие чтения
-            return result;
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(uri)
+                    .get()
+                    .build();
+            Response response = client.newCall(request).execute();
+            String t = response.body().string();
+            return t;
 
         } catch (Exception e) {
             e.printStackTrace();

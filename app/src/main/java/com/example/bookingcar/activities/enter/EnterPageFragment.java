@@ -20,6 +20,11 @@ import com.example.bookingcar.models.user.UserResponse;
 import com.example.bookingcar.requests.user.LogInRequest;
 import com.example.bookingcar.requests.user.SignInRequest;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import static android.content.Context.MODE_PRIVATE;
+
 public class EnterPageFragment extends Fragment implements View.OnClickListener {
 
     private int pageNumber;
@@ -77,6 +82,7 @@ public class EnterPageFragment extends Fragment implements View.OnClickListener 
             request.execute(user);
             try{
                 UserResponse userResult = request.get();
+                saveToken(userResult.token);
                 Toast.makeText(getActivity(), userResult.message, Toast.LENGTH_LONG).show();
             } catch (Exception e){
                 e.printStackTrace();
@@ -95,6 +101,7 @@ public class EnterPageFragment extends Fragment implements View.OnClickListener 
         request.execute(user);
         try{
             UserResponse userResult = request.get();
+            saveToken(userResult.token);
             Toast.makeText(getActivity(), userResult.message, Toast.LENGTH_LONG).show();
         } catch (Exception e){
             e.printStackTrace();
@@ -102,5 +109,28 @@ public class EnterPageFragment extends Fragment implements View.OnClickListener 
         }
 
 
+    }
+
+    public void saveToken(String token){
+
+        FileOutputStream fos = null;
+        try {
+
+            fos = getActivity().openFileOutput("token.txt", MODE_PRIVATE);
+            fos.write(token.getBytes());
+        }
+        catch(IOException ex) {
+            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        finally{
+            try{
+                if(fos!=null)
+                    fos.close();
+            }
+            catch(IOException ex){
+
+                Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
