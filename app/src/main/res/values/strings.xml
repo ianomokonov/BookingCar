@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">BookingCar</string>
+    <string name="app_name">Бронирование автомобилей</string>
     <string name="name">Имя</string>
     <string name="phone">Телефон</string>
     <string name="email">Email</string>
     <string name="password">Пароль</string>
-
 </resources>
