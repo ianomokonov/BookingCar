@@ -13,8 +13,11 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.bookingcar.R;
+import com.example.bookingcar.models.user.LogInUser;
 import com.example.bookingcar.models.user.SignInUser;
 import com.example.bookingcar.models.user.User;
+import com.example.bookingcar.models.user.UserResponse;
+import com.example.bookingcar.requests.user.LogInRequest;
 import com.example.bookingcar.requests.user.SignInRequest;
 
 public class EnterPageFragment extends Fragment implements View.OnClickListener {
@@ -67,6 +70,18 @@ public class EnterPageFragment extends Fragment implements View.OnClickListener 
         EditText emailView = view.findViewById(R.id.email);
         EditText passwordView = view.findViewById(R.id.password);
         if(pageNumber == 0){
+            LogInUser user = new LogInUser();
+            user.email = emailView.getText().toString();
+            user.password = passwordView.getText().toString();
+            LogInRequest request = new LogInRequest();
+            request.execute(user);
+            try{
+                UserResponse userResult = request.get();
+                Toast.makeText(getActivity(), userResult.message, Toast.LENGTH_LONG).show();
+            } catch (Exception e){
+                e.printStackTrace();
+                Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
+            }
             return;
         }
         EditText nameView = view.findViewById(R.id.name);
@@ -79,11 +94,11 @@ public class EnterPageFragment extends Fragment implements View.OnClickListener 
         SignInRequest request = new SignInRequest();
         request.execute(user);
         try{
-            User userResult = request.get();
-            Toast.makeText(getActivity(),"Пользователь "+userResult.name+" зарегистрирован",Toast.LENGTH_LONG).show();
+            UserResponse userResult = request.get();
+            Toast.makeText(getActivity(), userResult.message, Toast.LENGTH_LONG).show();
         } catch (Exception e){
             e.printStackTrace();
-            Toast.makeText(getActivity(),"Пользователь зарегистрирован",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
         }
 
 
